@@ -7,3 +7,12 @@
     <% for resource in @resources - @article.resources %>
       <%= link_to_remote "+ #{resource.filename}", :url => { :action => "resource_add", :id => @article.id, :resource_id => resource.id}, :update => 'resources' %><br/>
     <% end %>
+
+    <h4><%= _("Merge Articles")%></h4>
+	  <form action="/merge_articles" method="post">
+	    <p>
+	      Article ID
+	      <input type="text" size="1" name="merge_with" autocomplete="off"/>
+	    </p>
+	    <input type="submit" value="Merge"/>
+	  </form>
