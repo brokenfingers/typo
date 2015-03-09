@@ -29,7 +29,7 @@ class Admin::CategoriesController < Admin::BaseController
       @category = Category.find(params[:id])
       @category.attributes = params[:category]
     end
-    if request.post?
+    if request.post? && params[:action] == "new"
       @category = Category.new
       @category.name = params[:category][:name]
       @category.keywords = params[:category][:keywords]
@@ -44,6 +44,9 @@ class Admin::CategoriesController < Admin::BaseController
           return render(:partial => 'admin/content/categories')
         end
       end
+      return
+    elsif params[:action] == "edit" && request.post?
+      save_category
       return
     end
     render 'new'

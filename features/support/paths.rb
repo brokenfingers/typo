@@ -26,7 +26,9 @@ module NavigationHelpers
     when /^the category destroy page for "([^"]*)"$/
       category = Category.find(:first, :conditions => [ "name = ?", $1])
       '/admin/categories/destroy/' + category.id.to_s
-    
+    when /^the category edit page for "([^"]*)"$/
+      category = Category.find(:first, :conditions => [ "name = ?", $1])
+      '/admin/categories/edit/' + category.id.to_s
       
 
     # Add more mappings here.

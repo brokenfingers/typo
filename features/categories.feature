@@ -17,7 +17,7 @@ Feature: Merge Articles
 
     And The following categories exist:
       | id | name | keywords   | permalink | description |
-      | 1  | Tech | Technology |           |             |
+      | 1  | Cook | Recipes    |           |             |
 
     And I am logged into the admin panel as "admin"
     And I am on the admin index page
@@ -31,16 +31,26 @@ Feature: Merge Articles
 
   Scenario: An admin should be able to add a new category
     Given I follow "Categories"
-    When I fill in "category_name" with "IT"
+    When I fill in "category_name" with "Software"
     And I fill in "category_keywords" with "Computer Science"
     And I press "Save"
     Then I should be on the categories page
-    And I should see "IT"
+    And I should see "Software"
 
   Scenario: An admin should be able to delete a category
     Given I follow "Categories"
     When I follow "Delete"
-    And I am on the category destroy page for "Tech"
+    And I am on the category destroy page for "Cook"
     And I press "delete"
     Then I should be on the categories page 
-    And I should not see "Tech"
+    And I should not see "Cook"
+
+  Scenario: An admin should be able to edit a category
+    Given I follow "Categories"
+    When I follow "Edit"
+    And I am on the category edit page for "Cook"
+    When I fill in "category_name" with "Coding"
+    And I press "Save"
+    Then I should be on the categories page
+    And I should see "Coding"
+    And I should not see "Cook"

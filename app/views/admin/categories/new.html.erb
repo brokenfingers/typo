@@ -1,7 +1,14 @@
 <% @page_heading = _("Categories") %>
 
 <div class='left_form'>
-  <%= form_tag :action=>"new" do %>
+  <% if @category.nil? %>
+    <% act = "new" %>
+    <% id = nil %>
+  <% else %>
+    <% act = "edit" %>
+    <% id = @category.id %>
+  <% end %>
+  <%= form_tag :action=>act, :id=>id do %>
   <%= error_messages_for 'category' %>
   <div class='clearfix'>
     <label for="category_name"><%= _("Name")%></label>
