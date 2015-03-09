@@ -1,7 +1,13 @@
 When /^The following articles exist/ do |articles_table|
   articles_table.hashes.each do |article|
+    comment_param = article.delete("comments")
     added_article = Article.create!(article)
-    added_article.add_comment(author: added_article.author, body: "comment cool", article_id: added_article.id)
+    hash = {}
+    comment_param.split(',').each do |pair|
+      key,value = pair.split(/:/)
+      hash[key] = value
+    end
+    added_article.add_comment(hash.symbolize_keys)
     added_article.save
   end
 end

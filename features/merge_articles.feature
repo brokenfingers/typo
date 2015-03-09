@@ -11,9 +11,9 @@ Feature: Merge Articles
         | user1  | user1234 | user@hostname.com | 2          | tom  | active |
 
     And The following articles exist:
-      | id | title        | author | body         | state        | allow_comments |
-      | 1  | Software I   | admin  | Science I    | published    | true           | 
-      | 2  | Software II  | user1  | Science II   | published    | true           |
+      | id | title        | author | body         | state        | allow_comments | comments                                      |
+      | 1  | Software I   | admin  | Science I    | published    | true           | author:user1,body:comment cool1,article_id:1  |
+      | 2  | Software II  | user1  | Science II   | published    | true           | author:admin,body:comment cool2,article_id:2  |
 
   Scenario: A non-admin cannot merge articles
     Given I am logged into the admin panel as "user"
@@ -65,6 +65,6 @@ Feature: Merge Articles
     And I fill in "merge_with" with the id of article "Software II"
     And I press "Merge"
     Then I should be on the admin content page
-    When I follow "2"
-    Then I should see "comment cool"
-    And I should see "comment cool"
+    And I follow "2"
+    Then I should see "comment cool1"
+    And I should see "comment cool2"
