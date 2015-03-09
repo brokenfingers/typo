@@ -5,13 +5,15 @@
 
 <% end %>
 
- <h4><%= _("Merge Articles")%></h4>
- 	<%= form_tag :controller => "admin/content", :action => "merge", :id => @article.id do %>
- 		<div>
- 			<p>
- 				Article ID
- 				<%= text_field_tag "merge_with", '' %>
- 			</p>
- 		</div>
- 		<div style="padding: 10px 0px 0px 0px"><%= submit_tag "Merge" %></div>
- 	<% end %>
+<% if @article.user.admin? %>
+  <h4><%= _("Merge Articles")%></h4>
+    <%= form_tag :controller => "admin/content", :action => "merge", :id => @article.id do %>
+      <div>
+        <p>
+          Article ID
+          <%= text_field_tag "merge_with", '' %>
+        </p>
+      </div>
+    <div style="padding: 10px 0px 0px 0px"><%= submit_tag "Merge" %></div>
+  <% end %>
+<% end %>

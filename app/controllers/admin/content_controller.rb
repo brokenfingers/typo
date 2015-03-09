@@ -44,14 +44,26 @@ class Admin::ContentController < Admin::BaseController
     # Comments on each of the two original articles need to all carry over and point to the new, merged article.
     # The title of the new article should be the title from either one of the merged articles.
 
-    # articles that needs to be merged
     @origin_article = Article.find(params[:id])
-    @merging_article = Article.find(params[:merge_with])
-    
-    @origin_article.merge_with(@merging_article)
 
-    @merging_article.destroy
+    # checks that the user of the article is an admin
+    if !@origin_article.user.admin?
+      flash[:error] = _("Error, you are not allowed to perform this action")
+      redirect_to :action => 'index'
+      return
+    end
+
+    # checks that the article with :id => :merge_with exists
+    if !Article.exists?(params[:merge_with])
+      flash[:error] = _("Error, article with such ID does not exist.")
+      redirect_to :action => 'edit', :id => params[:id]
+      return
     
+
+    @merging_article = Article.find(params[:merge_with])
+    @origin_article.merge_with(@merging_article)
+    @merging_article.destroy
+
     set_the_flash
     redirect_to admin_content_path
   end
