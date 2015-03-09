@@ -43,11 +43,19 @@ Given /^the blog is set up$/ do
                 :state => 'active'})
 end
 
-And /^I am logged into the admin panel$/ do
+And /^I am logged into the admin panel as "(.*)"$/ do |user|
   visit '/accounts/login'
-  fill_in 'user_login', :with => 'admin'
-  fill_in 'user_password', :with => 'aaaaaaaa'
-  click_button 'Login'
+  case user
+  when "user"
+    fill_in 'user_login', :with => 'user1'
+    fill_in 'user_password', :with => 'user1234'
+    click_button 'Login'
+  when "admin"
+    fill_in 'user_login', :with => 'admin'
+    fill_in 'user_password', :with => 'aaaaaaaa'
+    click_button 'Login'
+  end
+  
   if page.respond_to? :should
     page.should have_content('Login successful')
   else

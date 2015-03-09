@@ -47,7 +47,7 @@ class Admin::ContentController < Admin::BaseController
     @origin_article = Article.find(params[:id])
 
     # checks that the user of the article is an admin
-    if !@origin_article.user.admin?
+    if !current_user.admin?
       flash[:error] = _("Error, you are not allowed to perform this action")
       redirect_to :action => 'index'
       return
