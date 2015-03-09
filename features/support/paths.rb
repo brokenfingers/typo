@@ -23,6 +23,11 @@ module NavigationHelpers
       '/admin'
     when /^the categories page$/
       '/admin/categories/new'
+    when /^the category destroy page for "([^"]*)"$/
+      category = Category.find(:first, :conditions => [ "name = ?", $1])
+      '/admin/categories/destroy/' + category.id.to_s
+    
+      
 
     # Add more mappings here.
     # Here is an example that pulls values out of the Regexp:
