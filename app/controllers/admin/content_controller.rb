@@ -58,6 +58,7 @@ class Admin::ContentController < Admin::BaseController
       flash[:error] = _("Error, article with such ID does not exist.")
       redirect_to :action => 'edit', :id => params[:id]
       return
+    end
     
 
     @merging_article = Article.find(params[:merge_with])
