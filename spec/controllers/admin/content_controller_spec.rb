@@ -544,6 +544,18 @@ describe Admin::ContentController do
         Article.should_not be_exists({:id => draft.id})
         Article.should_not be_exists({:id => draft_2.id})
       end
+
+      it 'should redirect to admin content page after successful merge' do
+        @article2 = Factory(:article)
+        post :merge, 'id' => @article.id, 'merge_with' => @article2.id
+        response.should redirect_to admin_content_path
+      end
+
+      it 'should delete the merging article after successful merge' do
+        @article2 = Factory(:article)
+        post :merge, 'id' => @article.id, 'merge_with' => @article2.id
+        Article.should_not be_exists({:id => @article2.id})
+      end
     end
 
     describe 'resource_add action' do
@@ -656,6 +668,13 @@ describe Admin::ContentController do
         ensure
           ActionMailer::Base.perform_deliveries = false
         end
+      end
+
+      # Specs to verify that the controller behaves correctly when non-admins attempt to merge articles
+      it 'should redirect if tries to merge articles' do
+        @article2 = Factory(:article, :user => @user)
+        post :merge, 'id' => @article.id, 'merge_with' => @article2.id
+        response.should redirect_to(:action => 'index')
       end
     end
 

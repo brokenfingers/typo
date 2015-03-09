@@ -630,5 +630,31 @@ describe Article do
     end
 
   end
+
+  # Specs to verify that the model’s merge method combines the given articles correctly
+  describe "#merge" do
+    before(:each) do
+      @origin_article = Factory.create(:article)
+      comment1 = Factory.create(:comment, :article => @origin_article)
+      @merging_article = Factory.create(:article)
+      comment2 = Factory.create(:comment, :article => @merging_article)
+    end
+    it "should return article" do
+      @origin_article = Factory.create(:article)
+      @merging_article = Factory.create(:article)
+      @origin_article.merge_with(@merging_article).should be_a(Article)
+    end
+
+    it "should merge two articles successfully" do
+      origin_article_body = @origin_article.body.to_s
+      merged_article = @origin_article.merge_with(@merging_article)
+      merged_article.title.should be == @origin_article.title
+      merged_article.author.should be == @origin_article.author
+      merged_article.state.should be == @origin_article.state
+      merged_article.id.should be == @origin_article.id
+      merged_article.body.should be == origin_article_body + (@merging_article.body || '')
+      merged_article.comments.count.should == 2
+    end
+  end
 end
 

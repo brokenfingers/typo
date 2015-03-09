@@ -433,6 +433,7 @@ class Article < Content
       self.comments << comment
     end
     self.save
+    return self
   end
 
   protected
