@@ -416,6 +416,25 @@ class Article < Content
     user.admin? || user_id == user.id
   end
 
+  def merge_with(article)
+    # A non-admin cannot merge articles.
+    # When articles are merged, the merged article should contain the text of both previous articles.
+    # When articles are merged, the merged article should have one author (either one of the authors of the original article).  
+    # Comments on each of the two original articles need to all carry over and point to the new, merged article.
+    # The title of the new article should be the title from either one of the merged articles.
+    # original_article.merge_with(merging_article)
+    # should return the merged article
+
+    self.body = (self.body || '') + (article.body || '')  # merge the contents for the articles together
+
+    comments = Comment.where(article_id: article.id)
+    comments.each do |comment|
+      comment.update_attribute(:article_id, self.id)
+      self.comments << comment
+    end
+    self.save
+  end
+
   protected
 
   def set_published_at
@@ -466,4 +485,5 @@ class Article < Content
     to = to - 1 # pull off 1 second so we don't overlap onto the next day
     return from..to
   end
+
 end

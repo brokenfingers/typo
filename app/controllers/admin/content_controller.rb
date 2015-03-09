@@ -37,6 +37,25 @@ class Admin::ContentController < Admin::BaseController
     new_or_edit
   end
 
+  def merge
+    # A non-admin cannot merge articles.
+    # When articles are merged, the merged article should contain the text of both previous articles.
+    # When articles are merged, the merged article should have one author (either one of the authors of the original article).  
+    # Comments on each of the two original articles need to all carry over and point to the new, merged article.
+    # The title of the new article should be the title from either one of the merged articles.
+
+    # articles that needs to be merged
+    @origin_article = Article.find(params[:id])
+    @merging_article = Article.find(params[:merge_with])
+    
+    @origin_article.merge_with(@merging_article)
+
+    @merging_article.destroy
+    
+    set_the_flash
+    redirect_to admin_content_path
+  end
+
   def destroy
     @record = Article.find(params[:id])
 
@@ -185,6 +204,8 @@ class Admin::ContentController < Admin::BaseController
 
   def set_the_flash
     case params[:action]
+    when 'merge'
+      flash[:notice] = _('Article was merged successfully.')
     when 'new'
       flash[:notice] = _('Article was successfully created')
     when 'edit'
@@ -239,9 +260,5 @@ class Admin::ContentController < Admin::BaseController
 
   def setup_resources
     @resources = Resource.by_created_at
-  end
-
-  def merge_articles
-    render 'new'
   end
 end
