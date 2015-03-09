@@ -60,10 +60,9 @@ class Admin::ContentController < Admin::BaseController
       return
     end
     
-
     @merging_article = Article.find(params[:merge_with])
     @origin_article.merge_with(@merging_article)
-    @merging_article.destroy
+    @merging_article.destroy # maybe include it in method merge_with(article) in app/models/article.rb
 
     set_the_flash
     redirect_to admin_content_path

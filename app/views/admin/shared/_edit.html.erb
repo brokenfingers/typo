@@ -5,7 +5,7 @@
 
 <% end %>
 
-<% if @article.user.admin? %>
+<% if current_user.admin? && @article.id != params[:id] %>
   <h4><%= _("Merge Articles")%></h4>
     <%= form_tag :controller => "admin/content", :action => "merge", :id => @article.id do %>
       <div>
