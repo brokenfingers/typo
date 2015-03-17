@@ -53,13 +53,20 @@ class Admin::ContentController < Admin::BaseController
       return
     end
 
+    # checks that article :id is not equal to the id of the article to :merge_with
+    if params[:id] == params[:merge_with]
+      flash[:error] = _("Error, cannot merge the article with itself.")
+      redirect_to :action => 'edit', :id => params[:id]
+      return
+    end
+
     # checks that the article with :id => :merge_with exists
     if !Article.exists?(params[:merge_with])
       flash[:error] = _("Error, article with such ID does not exist.")
       redirect_to :action => 'edit', :id => params[:id]
       return
     end
-    
+
     @merging_article = Article.find(params[:merge_with])
     @origin_article.merge_with(@merging_article)
     @merging_article.destroy # maybe include it in method merge_with(article) in app/models/article.rb
